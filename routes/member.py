@@ -7,7 +7,7 @@ from config.database import get_database
 
 member_router = APIRouter()
 
-@member_router.get("/all", response_model=list[MemberResponse])
+@member_router.get("/", response_model=list[MemberResponse])
 async def get_all_member(database: Database = Depends(get_database)):
     try:
         return await fetch_all_members(database)
