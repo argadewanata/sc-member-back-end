@@ -6,6 +6,7 @@ import asyncio
 import config.logging
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 
 from routes.auth import auth_router
@@ -13,6 +14,15 @@ from routes.health_check import health_check_router
 from routes.member import member_router
 
 app = FastAPI()
+
+# Configure CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], 
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.include_router(auth_router, prefix="/api/auth", tags=['Authentication'])
 app.include_router(health_check_router, prefix="/api/health_check", tags=['Health Check'])
