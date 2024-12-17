@@ -13,7 +13,13 @@ class LoginRequest(BaseModel):
     email: str
     password: str
 
-@auth_router.post("/login")
+class LoginResponse(BaseModel):
+    message: str
+    name: str
+    email: str
+    id: int
+
+@auth_router.post("/login", response_model=LoginResponse)
 async def login(request: LoginRequest, database: Database = Depends(get_database)):
     query = select(members_table).where(members_table.c.email == request.email)
     user = await database.fetch_one(query)
@@ -26,4 +32,9 @@ async def login(request: LoginRequest, database: Database = Depends(get_database
     if not pwd_context.verify(request.password, hashed_password):
         raise HTTPException(status_code=400, detail="Invalid email or password")
     
-    return {"message": "Login successful"}
+    return {
+        "message": "Login successful",
+        "name": user["nama_lengkap"],
+        "email": user["email"],
+        "id": user["id"]
+    }
