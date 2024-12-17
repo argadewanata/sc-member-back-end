@@ -8,11 +8,13 @@ import config.logging
 from fastapi import FastAPI
 from dotenv import load_dotenv
 
+from routes.auth import auth_router
 from routes.health_check import health_check_router
 from routes.member import member_router
 
 app = FastAPI()
 
+app.include_router(auth_router, prefix="/api/auth", tags=['Authentication'])
 app.include_router(health_check_router, prefix="/api/health_check", tags=['Health Check'])
 app.include_router(member_router, prefix="/api/member", tags=['Member Management'])
 
