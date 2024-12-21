@@ -14,7 +14,8 @@ async def read_users_card(current_user: dict = Depends(get_current_user)):
     return {
         "id": current_user["id"],
         "name": current_user["nama_lengkap"],
-        "email": current_user["email"]
+        "email": current_user["email"],
+        "is_admin": current_user["is_admin"]
     }
 
 @member_router.get("/", response_model=list[MemberResponse])
