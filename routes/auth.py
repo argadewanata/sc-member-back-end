@@ -49,6 +49,6 @@ async def register(request: RegisterRequest, database: Database = Depends(get_da
     )
     try:
         await database.execute(query)
-        return {"message": "User registered successfully"}
+        return {"message": "Registration successful!"}
     except Exception as e:
         raise HTTPException(status_code=500, detail="Failed to register user")
