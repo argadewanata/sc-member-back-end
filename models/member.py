@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field, constr, conint
 from datetime import datetime, date
-from typing import Optional
+from typing import List,Optional
 
 class Member(BaseModel):
     id: int
@@ -8,15 +8,15 @@ class Member(BaseModel):
     email: str
     password: str
     nama_lengkap: constr(max_length=255)
-    provinsi: constr(max_length=255)
-    kota: constr(max_length=255)
+    provinsi: Optional[constr(max_length=255)] = None
+    kota: Optional[constr(max_length=255)] = None
     kecamatan: Optional[constr(max_length=255)] = None
     kelurahan: Optional[constr(max_length=255)] = None
-    alamat_lengkap: str
+    alamat_lengkap: Optional[str] = None
     nomor_whatsapp: constr(max_length=20)
-    jenis_kelamin: str = Field(..., max_length=1, pattern='^(L|P)$')
-    tanggal_lahir: date
-    pendidikan_terakhir: int = Field(..., ge=0, le=9)
+    jenis_kelamin: Optional[str] = None
+    tanggal_lahir: Optional[date] = None
+    pendidikan_terakhir: Optional[int] = None
     profesi: Optional[constr(max_length=255)] = None
     referensi: Optional[str] = None
     harapan: Optional[str] = None
@@ -29,3 +29,15 @@ class MemberResponse(BaseModel):
     nama_lengkap: str
     email: str
     nomor_whatsapp: str
+    is_verified: bool
+    is_active: bool
+    is_admin: bool
+
+class PaginatedMembersResponse(BaseModel):
+    members: List[MemberResponse]
+    total: int
+
+class MemberCreate(BaseModel):
+    nama_lengkap: constr(max_length=255)
+    email: str
+    nomor_whatsapp: constr(max_length=20)
