@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field, constr, conint
 from datetime import datetime, date
-from typing import Optional
+from typing import List,Optional
 
 class Member(BaseModel):
     id: int
@@ -29,3 +29,7 @@ class MemberResponse(BaseModel):
     nama_lengkap: str
     email: str
     nomor_whatsapp: str
+
+class PaginatedMembersResponse(BaseModel):
+    members: List[MemberResponse]
+    total: int

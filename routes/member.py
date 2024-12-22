@@ -1,8 +1,7 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, Query
 from databases import Database
-from fastapi.security import OAuth2PasswordBearer
-from models.member import Member, MemberResponse
-from services.member.all import fetch_all_members
+from models.member import Member, MemberResponse, PaginatedMembersResponse
+from services.member.all import fetch_all_members_paginated
 from services.member.specific import fetch_member_by_id
 from services.member.card import get_current_user
 from config.database import get_database
@@ -18,10 +17,14 @@ async def read_users_card(current_user: dict = Depends(get_current_user)):
         "is_admin": current_user["is_admin"]
     }
 
-@member_router.get("/", response_model=list[MemberResponse])
-async def get_all_member(database: Database = Depends(get_database)):
+@member_router.get("/", response_model=PaginatedMembersResponse)
+async def get_all_member(
+    page: int = Query(1, ge=1),
+    size: int = Query(10, ge=1),
+    database: Database = Depends(get_database)
+):
     try:
-        return await fetch_all_members(database)
+        return await fetch_all_members_paginated(database, page, size)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
