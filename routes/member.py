@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Depends, Query
 from databases import Database
 from models.member import Member, MemberResponse, PaginatedMembersResponse
-from services.member.all import fetch_all_members_paginated
+from services.member.all import fetch_all_members_paginated, search_members
 from services.member.specific import fetch_member_by_id
 from services.member.card import get_current_user
 from config.database import get_database
@@ -25,6 +25,18 @@ async def get_all_member(
 ):
     try:
         return await fetch_all_members_paginated(database, page, size)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@member_router.get("/search", response_model=PaginatedMembersResponse)
+async def search_member(
+    search: str,
+    page: int = Query(1, ge=1),
+    size: int = Query(10, ge=1),
+    database: Database = Depends(get_database)
+):
+    try:
+        return await search_members(database, search, page, size)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
