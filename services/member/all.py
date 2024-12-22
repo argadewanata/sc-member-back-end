@@ -11,7 +11,10 @@ async def fetch_all_members_paginated(database: Database, page: int, size: int):
             members_table.c.id,
             members_table.c.nama_lengkap,
             members_table.c.email,
-            members_table.c.nomor_whatsapp
+            members_table.c.nomor_whatsapp,
+            members_table.c.is_verified,
+            members_table.c.is_active,
+            members_table.c.is_admin
         )
         .offset(offset)
         .limit(size)

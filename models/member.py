@@ -29,6 +29,9 @@ class MemberResponse(BaseModel):
     nama_lengkap: str
     email: str
     nomor_whatsapp: str
+    is_verified: bool
+    is_active: bool
+    is_admin: bool
 
 class PaginatedMembersResponse(BaseModel):
     members: List[MemberResponse]
