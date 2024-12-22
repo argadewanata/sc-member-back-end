@@ -15,7 +15,8 @@ async def read_users_card(current_user: dict = Depends(get_current_user)):
         "id": current_user["id"],
         "name": current_user["nama_lengkap"],
         "email": current_user["email"],
-        "is_admin": current_user["is_admin"]
+        "is_admin": current_user["is_admin"],
+        "nomor_whatsapp": current_user["nomor_whatsapp"],
     }
 
 @member_router.get("/", response_model=PaginatedMembersResponse)
