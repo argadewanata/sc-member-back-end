@@ -5,7 +5,7 @@ from models.member import Member, MemberResponse, PaginatedMembersResponse, Memb
 from services.member.specific import fetch_member_by_id
 from services.member.card import get_current_user
 from services.member.add import add_new_member
-from config.database import get_database
+from config.database import get_database,members_table
 
 member_router = APIRouter()
 
@@ -47,6 +47,19 @@ async def get_member_by_id(id: int, database: Database = Depends(get_database)):
         return await fetch_member_by_id(id, database)
     except HTTPException as e:
         raise e
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@member_router.put("/update/{id}")
+async def update_member(id: int, member_data: dict, database: Database = Depends(get_database)):
+    try:
+        query = (
+            members_table.update()
+            .where(members_table.c.id == id)
+            .values(is_verified=member_data['is_verified'], is_active=member_data['is_active'])
+        )
+        await database.execute(query)
+        return {"message": "Member updated successfully"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
